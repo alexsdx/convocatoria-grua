@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Convocatoria · Simulador de Grúa Portuaria</title>
+<meta name="description" content="Convocatoria para estudiantes de Sistemas del ITCM: participa en el desarrollo de un simulador inmersivo de grúa portuaria.">
+<meta property="og:title" content="Convocatoria · Simulador de Grúa Portuaria (ITCM)">
+<meta property="og:description" content="Buscamos 4 estudiantes de Sistemas para desarrollar un simulador de grúa portuaria con Unreal Engine, C++ y controles industriales.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#071226">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --fondo: #071226;
+    --fondo-2: #0c1d3a;
+    --tarjeta: #10254a;
+    --borde: #1f4a8a;
+    --azul: #1e7bff;
+    --azul-claro: #5fb0ff;
+    --amarillo: #ffc928;
+    --texto: #eaf1ff;
+    --texto-2: #a9bbdb;
+    --radio: 14px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--fondo); color: var(--texto);
+    font-family: "Barlow", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 17px; line-height: 1.6;
+  }
+  h1, h2, h3 { font-family: "Barlow Condensed", "Arial Narrow", sans-serif; line-height: 1.1; margin: 0 0 .5em; letter-spacing: .01em; }
+  h2 { font-size: clamp(1.8rem, 4vw, 2.4rem); text-transform: uppercase; }
+  h2 .acento { color: var(--amarillo); }
+  h3 { font-size: 1.35rem; }
+  p { margin: 0 0 1em; }
+  a { color: var(--azul-claro); }
+  .contenedor { width: min(1080px, 100% - 32px); margin-inline: auto; }
+
+  /* Aviso de borrador */
+  .borrador {
+    background: repeating-linear-gradient(-45deg, #ffc928 0 14px, #1b1b1b 14px 28px);
+    padding: 6px 0; text-align: center;
+  }
+  .borrador span { background: #ffc928; color: #111; font-weight: 600; padding: 2px 10px; border-radius: 4px; font-size: .9rem; }
+
+  /* Encabezado */
+  .barra { border-bottom: 1px solid var(--borde); background: rgba(7,18,38,.92); position: sticky; top: 0; z-index: 10; backdrop-filter: blur(6px); }
+  .barra .contenedor { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; }
+  .institucion { font-size: .88rem; color: var(--texto-2); line-height: 1.3; }
+  .institucion strong { color: var(--texto); display: block; font-size: .95rem; }
+  .boton {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    background: var(--amarillo); color: #10131a; font-weight: 700; text-decoration: none;
+    font-family: "Barlow Condensed", sans-serif; font-size: 1.2rem; letter-spacing: .03em; text-transform: uppercase;
+    padding: 12px 26px; border-radius: 10px; border: 0; cursor: pointer; white-space: nowrap;
+    box-shadow: 0 6px 22px rgba(255,201,40,.25); transition: transform .15s, box-shadow .15s;
+  }
+  .boton:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(255,201,40,.35); }
+  .boton.chico { font-size: 1rem; padding: 8px 16px; }
+  .boton[aria-disabled="true"] { background: #4a5875; color: #d4dcec; box-shadow: none; cursor: not-allowed; transform: none; }
+
+  /* Portada */
+  .portada {
+    position: relative; overflow: hidden;
+    background:
+      linear-gradient(90deg, rgba(7,18,38,1) 0%, rgba(7,18,38,.92) 45%, rgba(7,18,38,.35) 100%),
+      url("img/grua.jpg") right center / cover no-repeat;
+    padding: clamp(48px, 9vw, 110px) 0 clamp(48px, 8vw, 90px);
+  }
+  .etiqueta {
+    display: inline-block; background: var(--azul); color: #fff; font-family: "Barlow Condensed", sans-serif;
+    font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 4px 12px; border-radius: 6px; margin-bottom: 18px;
+  }
+  .portada h1 { font-size: clamp(2.6rem, 8vw, 5rem); text-transform: uppercase; }
+  .portada h1 span { color: var(--amarillo); display: block; }
+  .portada .lema { font-size: clamp(1.05rem, 2.4vw, 1.3rem); color: var(--texto-2); max-width: 36rem; }
+  .portada .lema strong { color: var(--texto); }
+  .acciones { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin-top: 26px; }
+  .cierre { font-size: .98rem; color: var(--texto-2); }
+  .cierre strong { color: var(--amarillo); }
+
+  /* Secciones */
+  section.bloque { padding: clamp(48px, 8vw, 80px) 0; }
+  section.alterna { background: var(--fondo-2); }
+  .intro { color: var(--texto-2); max-width: 46rem; }
+  .rejilla { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .tarjeta { background: var(--tarjeta); border: 1px solid var(--borde); border-radius: var(--radio); padding: 22px; }
+  .tarjeta p:last-child, .tarjeta ul:last-child { margin-bottom: 0; }
+  .tarjeta .num { font-family: "Barlow Condensed", sans-serif; color: var(--amarillo); font-weight: 800; font-size: 1rem; letter-spacing: .08em; text-transform: uppercase; }
+  .tarjeta ul { padding-left: 1.1em; margin: .4em 0 0; color: var(--texto-2); }
+  .tarjeta .chips { margin-top: 12px; }
+  .chip { display: inline-block; font-size: .8rem; border: 1px solid var(--borde); color: var(--azul-claro); border-radius: 999px; padding: 1px 10px; margin: 0 4px 6px 0; }
+
+  .proyecto { display: grid; gap: 32px; grid-template-columns: 1.1fr .9fr; align-items: center; }
+  .proyecto figure { margin: 0; }
+  .proyecto img { width: 100%; border-radius: var(--radio); border: 1px solid var(--borde); display: block; }
+  .proyecto figcaption { font-size: .82rem; color: var(--texto-2); margin-top: 6px; }
+  .datos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 22px; }
+  .dato { border-left: 3px solid var(--amarillo); padding: 4px 0 4px 12px; }
+  .dato b { display: block; font-family: "Barlow Condensed", sans-serif; font-size: 1.6rem; line-height: 1.1; }
+  .dato span { font-size: .9rem; color: var(--texto-2); }
+
+  .lista-check { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+  .lista-check li { position: relative; padding-left: 34px; }
+  .lista-check li::before {
+    content: "✓"; position: absolute; left: 0; top: 1px; width: 24px; height: 24px; border-radius: 50%;
+    background: var(--azul); color: #fff; font-size: .8rem; font-weight: 700; display: grid; place-items: center;
+  }
+  .lista-check.deseable li::before { content: "+"; background: transparent; border: 1.5px solid var(--azul-claro); color: var(--azul-claro); }
+  .nota { font-size: .88rem; color: var(--texto-2); margin-top: 14px; }
+
+  .linea { list-style: none; padding: 0; margin: 0; counter-reset: paso; display: grid; gap: 0; }
+  .linea li { position: relative; padding: 0 0 26px 58px; counter-increment: paso; }
+  .linea li::before {
+    content: counter(paso); position: absolute; left: 0; top: 0; width: 40px; height: 40px; border-radius: 50%;
+    background: var(--amarillo); color: #111; font-weight: 800; display: grid; place-items: center; font-family: "Barlow Condensed", sans-serif; font-size: 1.25rem;
+  }
+  .linea li::after { content: ""; position: absolute; left: 19px; top: 44px; bottom: 4px; width: 2px; background: var(--borde); }
+  .linea li:last-child::after { display: none; }
+  .linea .fecha { color: var(--amarillo); font-weight: 600; font-size: .95rem; }
+  .linea h3 { margin-bottom: .2em; }
+  .linea p { color: var(--texto-2); margin: 0; }
+
+  .postulate { text-align: center; background: linear-gradient(135deg, #0f3d8c, #0a1f45); border: 1px solid var(--borde); border-radius: 20px; padding: clamp(28px, 6vw, 56px) 22px; }
+  .postulate .intro { margin: 0 auto 22px; }
+  .postulate ol { text-align: left; max-width: 36rem; margin: 0 auto 26px; color: var(--texto-2); }
+  .postulate ol li { margin-bottom: 6px; }
+  .postulate ol strong { color: var(--texto); }
+
+  details { background: var(--tarjeta); border: 1px solid var(--borde); border-radius: 12px; padding: 0 18px; margin-bottom: 10px; }
+  summary { cursor: pointer; padding: 15px 0; font-weight: 600; list-style: none; position: relative; padding-right: 28px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; position: absolute; right: 0; top: 11px; font-size: 1.4rem; color: var(--amarillo); }
+  details[open] summary::after { content: "–"; }
+  details p { color: var(--texto-2); }
+
+  .privacidad { font-size: .9rem; color: var(--texto-2); }
+  .privacidad h3 { color: var(--texto); }
+
+  footer { border-top: 1px solid var(--borde); padding: 30px 0 40px; font-size: .9rem; color: var(--texto-2); }
+  footer .contenedor { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; }
+
+  @media (max-width: 760px) {
+    body { font-size: 16px; }
+    .proyecto { grid-template-columns: 1fr; }
+    .portada { background:
+      linear-gradient(180deg, rgba(7,18,38,.75) 0%, rgba(7,18,38,.95) 55%, rgba(7,18,38,1) 100%),
+      url("img/grua.jpg") center top / cover no-repeat; }
+    .barra .boton { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+  DATOS EDITABLES: cambia aquí fechas, contacto y enlaces.
+  Lo demás de la página se llena solo con estos valores.
+============================================================= -->
+<script>
+const CONFIG = {
+  // Mientras sea true, se muestra la franja "BORRADOR". Cámbialo a false al publicar.
+  borrador: true,
+
+  // Enlace al formulario de Microsoft Forms. Si está vacío, el botón aparece desactivado.
+  formulario: "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=RVY7ParqukKsUskxkQp_Lyo-B5l0nHNPrFsCfztMaXBUMzRVUkdYM082WFFJWENZNldDRE0zSEw0SC4u",
+
+  // Fechas (texto libre). Las sugeridas siguen el plan v2.1: selección en nov–dic 2026 e inicio en enero de 2027.
+  fechaCierre:      "viernes 13 de noviembre de 2026",
+  fechaEntrevistas: "17 al 27 de noviembre de 2026",
+  fechaResultados:  "viernes 4 de diciembre de 2026",
+  fechaInicio:      "enero de 2027",
+
+  correo:   "",                       // Correo para dudas. Vacío = no se muestra.
+  telefono: "",                       // Opcional, p. ej. "833 000 0000". Vacío = no se muestra.
+  lugar:    "el Departamento de Sistemas y Computación del ITCM",
+  horario:  "",                       // Opcional, p. ej. "lunes a viernes, 9:00 a 14:00 h". Vacío = no se muestra.
+
+  // Enlace al aviso de privacidad integral del ITCM (lo proporciona la Unidad de Transparencia).
+  avisoIntegral: ""
+};
+</script>
+
+<div class="borrador" id="franja-borrador" hidden><span>BORRADOR · fechas y datos por confirmar</span></div>
+
+<header class="barra">
+  <div class="contenedor">
+    <div class="institucion">
+      <strong>Instituto Tecnológico de Ciudad Madero</strong>
+      Tecnológico Nacional de México · Depto. de Sistemas y Computación
+    </div>
+    <a class="boton chico js-formulario" href="#postulate">Postúlate</a>
+  </div>
+</header>
+
+<main>
+  <section class="portada">
+    <div class="contenedor">
+      <span class="etiqueta">Convocatoria para estudiantes</span>
+      <h1>Simulador de <span>grúa portuaria</span></h1>
+      <p class="lema">Buscamos <strong>4 estudiantes de Sistemas</strong> para construir, desde cero, el software de un
+        simulador inmersivo de cabina para capacitar a operadores de grúa del puerto: <strong>6 pantallas, palancas
+        industriales reales y plataforma de movimiento</strong>.</p>
+      <div class="acciones">
+        <a class="boton js-formulario" href="#postulate">Postúlate aquí</a>
+        <span class="cierre">Cierre: <strong data-campo="fechaCierre"></strong></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloque" id="proyecto">
+    <div class="contenedor proyecto">
+      <div>
+        <h2>El <span class="acento">proyecto</span></h2>
+        <p>El ITCM desarrolla un simulador de grúa portuaria para el puerto de la región. Es un proyecto
+          multidisciplinario: <strong>Mecánica</strong> diseña la cabina, <strong>Electrónica</strong> los controles,
+          <strong>Industrial</strong> los procesos de capacitación y <strong>Sistemas</strong>, el equipo al que te
+          invitamos, desarrolla todo el software.</p>
+        <p class="intro">Ese software incluye el motor de simulación, la física de la grúa y de la carga, el entorno 3D del
+          puerto, la lectura de los controles, la plataforma de movimiento y la consola del instructor. Trabajarás junto a
+          un Doctor en Ciencias de la Computación y un Ingeniero en Electrónica.</p>
+        <div class="datos">
+          <div class="dato"><b>4</b><span>lugares para estudiantes</span></div>
+          <div class="dato"><b>6</b><span>pantallas sincronizadas</span></div>
+          <div class="dato"><b>1 kHz</b><span>física de la carga en C++</span></div>
+          <div class="dato"><b>Dic 2027</b><span>entrega al puerto</span></div>
+        </div>
+      </div>
+      <figure>
+        <img src="img/cabina.jpg" alt="Ilustración de una cabina de simulador con varias pantallas en arco, palancas a ambos lados del asiento y piso elevado" loading="lazy">
+        <figcaption>Ilustración conceptual; el diseño final de la cabina lo definen Mecánica y Electrónica.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="bloque alterna" id="roles">
+    <div class="contenedor">
+      <h2>¿Qué <span class="acento">harás</span>?</h2>
+      <p class="intro">Cada integrante tendrá un área principal y otra de respaldo. No necesitas dominarlo todo: buscamos
+        bases sólidas y ganas de aprender. Al postularte nos dirás qué áreas te interesan más.</p>
+      <div class="rejilla">
+        <article class="tarjeta">
+          <div class="num">Área 1</div>
+          <h3>Simulación y física</h3>
+          <p>Modelar el movimiento de la grúa y el balanceo de la carga colgada del cable, con viento, límites y
+            colisiones, y validarlo contra modelos matemáticos.</p>
+          <div class="chips"><span class="chip">C++</span><span class="chip">Dinámica</span><span class="chip">Métodos numéricos</span></div>
+        </article>
+        <article class="tarjeta">
+          <div class="num">Área 2</div>
+          <h3>Gráficos y entorno 3D</h3>
+          <p>Construir el puerto, el buque y los contenedores; iluminación, clima y rendimiento a 60 fps en varias
+            pantallas con perspectiva correcta.</p>
+          <div class="chips"><span class="chip">Unreal Engine 5</span><span class="chip">Blender</span><span class="chip">Optimización</span></div>
+        </article>
+        <article class="tarjeta">
+          <div class="num">Área 3</div>
+          <h3>Hardware y sistemas</h3>
+          <p>Leer palancas y botoneras industriales, comunicar las computadoras en red, enviar señales a la plataforma
+            de movimiento y automatizar compilaciones.</p>
+          <div class="chips"><span class="chip">USB-HID</span><span class="chip">UDP</span><span class="chip">Microcontroladores</span><span class="chip">PLC / CANopen</span></div>
+        </article>
+        <article class="tarjeta">
+          <div class="num">Área 4</div>
+          <h3>Instructor, UX y calidad</h3>
+          <p>Crear la consola del instructor (escenarios, fallas, clima), las pantallas de la cabina, los reportes de
+            desempeño y las pruebas con operadores reales.</p>
+          <div class="chips"><span class="chip">Interfaces</span><span class="chip">Pruebas</span><span class="chip">Datos y métricas</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloque" id="requisitos">
+    <div class="contenedor rejilla" style="align-items:start">
+      <div>
+        <h2><span class="acento">Requisitos</span></h2>
+        <ul class="lista-check">
+          <li>Ser estudiante inscrito de Ingeniería en Sistemas Computacionales del ITCM.</li>
+          <li>Cursar al menos el 5.º semestre (por confirmar con el departamento).</li>
+          <li>Saber programar bien en al menos un lenguaje: C++, C#, Python o similar.</li>
+          <li><strong>Disponibilidad de unas 20 horas por semana</strong> de enero a diciembre de 2027, y de 30 a 35 horas
+            en el verano.</li>
+          <li>Compromiso de permanecer en el proyecto hasta su entrega.</li>
+        </ul>
+      </div>
+      <div>
+        <h2><span class="acento">Deseable</span></h2>
+        <ul class="lista-check deseable">
+          <li>C++ y Unreal Engine (Unity/C# también suma).</li>
+          <li>Física, álgebra lineal o métodos numéricos.</li>
+          <li>Git y trabajo en equipo con repositorios.</li>
+          <li>Modelado 3D (Blender) o desarrollo de videojuegos.</li>
+          <li>Arduino, Teensy, STM32 o ESP32; redes y protocolos.</li>
+          <li>Inglés técnico para leer documentación.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloque alterna" id="beneficios">
+    <div class="contenedor">
+      <h2><span class="acento">Beneficios</span></h2>
+      <div class="rejilla">
+        <div class="tarjeta"><h3>Apoyo económico</h3><p>Beca o estímulo mensual para cada integrante, sujeto a la
+          autorización del recurso por parte del ITCM/TecNM.</p></div>
+        <div class="tarjeta"><h3>Valor académico</h3><p>Posibilidad de registrar tu participación como servicio social,
+          residencia profesional o tesis, sujeto a aprobación del departamento.</p></div>
+        <div class="tarjeta"><h3>Experiencia real</h3><p>Un producto que usará un puerto para capacitar operadores, con
+          tecnologías de la industria: Unreal Engine 5, C++ y control industrial.</p></div>
+        <div class="tarjeta"><h3>Portafolio y autoría</h3><p>Constancia de participación, crédito en el software y
+          posibilidad de colaborar en artículos y congresos.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloque" id="proceso">
+    <div class="contenedor" style="max-width:760px">
+      <h2>Proceso y <span class="acento">fechas</span></h2>
+      <ol class="linea">
+        <li><span class="fecha">Hasta el <span data-campo="fechaCierre"></span></span><h3>Postulación en línea</h3>
+          <p>Llena el formulario con tu cuenta institucional y adjunta tu CV o portafolio.</p></li>
+        <li><span class="fecha">Al cierre</span><h3>Revisión de perfiles</h3>
+          <p>Se evalúan conocimientos, proyectos previos, disponibilidad y tu respuesta al reto breve.</p></li>
+        <li><span class="fecha" data-campo="fechaEntrevistas"></span><h3>Entrevista y reto técnico</h3>
+          <p>Una conversación corta y un ejercicio práctico sencillo, adaptado al área que elijas.</p></li>
+        <li><span class="fecha" data-campo="fechaResultados"></span><h3>Resultados</h3>
+          <p>Se publican los 4 seleccionados y 2 lugares de reserva; se avisa por correo institucional.</p></li>
+        <li><span class="fecha" data-campo="fechaInicio"></span><h3>Inicio del proyecto</h3>
+          <p>Capacitación inicial en el motor y las herramientas, y arranque formal del desarrollo.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="bloque alterna" id="postulate">
+    <div class="contenedor">
+      <div class="postulate">
+        <h2>¿Listo para <span class="acento">postularte</span>?</h2>
+        <p class="intro">Inicia sesión con tu cuenta <strong>@cdmadero.tecnm.mx</strong>. Te tomará unos 15 minutos;
+          ten a la mano:</p>
+        <ol>
+          <li><strong>Tus datos escolares:</strong> número de control, semestre y promedio.</li>
+          <li><strong>Tu CV o portafolio</strong> en PDF y, si tienes, enlace a GitHub, demos o proyectos previos.</li>
+          <li><strong>Una idea breve</strong> (máx. 200 palabras): ¿cómo conectarías las palancas de la cabina con el
+            simulador, o cómo mostrarías la escena en varias pantallas sin que se vea “quebrada”?</li>
+        </ol>
+        <a class="boton js-formulario" id="boton-principal" href="#">Ir al formulario</a>
+        <p class="nota">Cierre: <strong data-campo="fechaCierre"></strong></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloque" id="preguntas">
+    <div class="contenedor" style="max-width:820px">
+      <h2>Preguntas <span class="acento">frecuentes</span></h2>
+      <details><summary>No sé usar Unreal Engine, ¿puedo postularme?</summary>
+        <p>Sí. Al inicio habrá capacitación. Valoramos más que programes bien y aprendas rápido que conocer ya el motor.</p></details>
+      <details><summary>¿Es compatible con mis clases?</summary>
+        <p>Está pensado para unas 20 horas por semana durante el semestre, con horario acordado con el equipo. En verano
+          se trabaja más intensamente (30 a 35 horas).</p></details>
+      <details><summary>Soy de otra carrera, ¿puedo participar?</summary>
+        <p>Esta convocatoria es para el componente de Sistemas. Si estudias Mecánica, Electrónica o Industrial, pregunta
+          en tu departamento por la participación de tu área en el proyecto.</p></details>
+      <details><summary>¿De cuánto es el apoyo económico?</summary>
+        <p>El monto y la figura (beca o estímulo) dependen de la autorización del recurso. Se informará a los
+          seleccionados antes del inicio.</p></details>
+      <details><summary>¿Puedo liberar mi servicio social o residencia?</summary>
+        <p>Es posible, siempre que cumplas los requisitos de créditos de cada modalidad y el departamento lo apruebe.
+          Indícalo en el formulario.</p></details>
+      <details><summary>¿Quién es dueño de lo que desarrolle?</summary>
+        <p>La propiedad intelectual se rige por los lineamientos del TecNM. Tu autoría se reconoce en el registro del
+          software y en las publicaciones en que participes.</p></details>
+      <details><summary>Tengo más dudas, ¿a quién pregunto?</summary>
+        <p>Acude a <span data-campo="lugar"></span><span data-si-horario> (<span data-campo="horario"></span>)</span><span data-si-correo>, escribe a
+          <a data-campo-correo href="#"></a></span><span data-si-telefono> o llama al <span data-campo="telefono"></span></span>.</p></details>
+    </div>
+  </section>
+
+  <section class="bloque alterna" id="privacidad">
+    <div class="contenedor privacidad" style="max-width:820px">
+      <h3>Aviso de privacidad simplificado</h3>
+      <p>El Instituto Tecnológico de Ciudad Madero es el responsable del tratamiento de los datos personales que
+        proporciones en el formulario de postulación: nombre, número de control, carrera, semestre, promedio, datos de
+        contacto, CV y portafolio. Los utilizaremos únicamente para evaluar tu postulación, comunicarnos contigo y, en su
+        caso, integrarte al proyecto. No se transferirán a terceros, salvo las excepciones previstas por la ley.
+        Los datos de quienes no resulten seleccionados se eliminarán al concluir el proceso, salvo los de reserva.</p>
+      <p>Puedes ejercer tus derechos de acceso, rectificación, cancelación y oposición (ARCO) ante la Unidad de
+        Transparencia del ITCM. <span data-si-aviso>Consulta el <a data-campo-aviso href="#" target="_blank" rel="noopener">aviso de privacidad integral</a>.</span></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="contenedor">
+    <div>Proyecto Simulador de Grúa Portuaria · ITCM · Tecnológico Nacional de México</div>
+    <div data-si-correo><a data-campo-correo href="#"></a></div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  const c = CONFIG;
+  document.getElementById("franja-borrador").hidden = !c.borrador;
+
+  document.querySelectorAll("[data-campo]").forEach(el => { el.textContent = c[el.dataset.campo] || ""; });
+  document.querySelectorAll("[data-campo-correo]").forEach(a => { a.textContent = c.correo; a.href = "mailto:" + c.correo; });
+  document.querySelectorAll("[data-si-correo]").forEach(el => { el.hidden = !c.correo; });
+  document.querySelectorAll("[data-si-telefono]").forEach(el => { el.hidden = !c.telefono; });
+  document.querySelectorAll("[data-si-horario]").forEach(el => { el.hidden = !c.horario; });
+  document.querySelectorAll("[data-si-aviso]").forEach(el => { el.hidden = !c.avisoIntegral; });
+  document.querySelectorAll("[data-campo-aviso]").forEach(a => { a.href = c.avisoIntegral; });
+
+  // Los botones del encabezado y la portada bajan a la sección; el principal abre el formulario.
+  const principal = document.getElementById("boton-principal");
+  if (c.formulario) {
+    principal.href = c.formulario;
+    principal.target = "_blank";
+    principal.rel = "noopener";
+  } else {
+    principal.textContent = "Formulario disponible pronto";
+    principal.setAttribute("aria-disabled", "true");
+    principal.addEventListener("click", e => e.preventDefault());
+  }
+})();
+</script>
+</body>
+</html>
