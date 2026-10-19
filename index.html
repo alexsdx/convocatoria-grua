@@ -163,20 +163,20 @@
 <script>
 const CONFIG = {
   // Mientras sea true, se muestra la franja "BORRADOR". Cámbialo a false al publicar.
-  borrador: true,
+  borrador: false,
 
   // Enlace al formulario de Microsoft Forms. Si está vacío, el botón aparece desactivado.
   formulario: "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=RVY7ParqukKsUskxkQp_Lyo-B5l0nHNPrFsCfztMaXBUMzRVUkdYM082WFFJWENZNldDRE0zSEw0SC4u",
 
-  // Fechas (texto libre). Las sugeridas siguen el plan v2.1: selección en nov–dic 2026 e inicio en enero de 2027.
-  fechaCierre:      "viernes 13 de noviembre de 2026",
-  fechaEntrevistas: "17 al 27 de noviembre de 2026",
-  fechaResultados:  "viernes 4 de diciembre de 2026",
+  // Fechas (texto libre), confirmadas el 18 de octubre de 2026.
+  fechaCierre:      "martes 20 de octubre de 2026, 23:59 h",
+  fechaEntrevistas: "miércoles 21, jueves 22 y viernes 23 de octubre, 12:00 h",
+  fechaResultados:  "al concluir las entrevistas",
   fechaInicio:      "enero de 2027",
 
-  correo:   "",                       // Correo para dudas. Vacío = no se muestra.
+  correo:   "sistemas@cdmadero.tecnm.mx",                     // Correo para dudas. Vacío = no se muestra.
   telefono: "",                       // Opcional, p. ej. "833 000 0000". Vacío = no se muestra.
-  lugar:    "el Departamento de Sistemas y Computación del ITCM",
+  lugar:    "Departamento de Sistemas y Computación del ITCM",
   horario:  "",                       // Opcional, p. ej. "lunes a viernes, 9:00 a 14:00 h". Vacío = no se muestra.
 
   // Enlace al aviso de privacidad integral del ITCM (lo proporciona la Unidad de Transparencia).
@@ -280,7 +280,7 @@ const CONFIG = {
         <h2><span class="acento">Requisitos</span></h2>
         <ul class="lista-check">
           <li>Ser estudiante inscrito de Ingeniería en Sistemas Computacionales del ITCM.</li>
-          <li>Cursar al menos el 5.º semestre (por confirmar con el departamento).</li>
+          <li>Cursar del 3.<sup>er</sup> semestre en adelante.</li>
           <li>Saber programar bien en al menos un lenguaje: C++, C#, Python o similar.</li>
           <li><strong>Disponibilidad de unas 20 horas por semana</strong> de enero a diciembre de 2027, y de 30 a 35 horas
             en el verano.</li>
@@ -325,8 +325,9 @@ const CONFIG = {
           <p>Llena el formulario con tu cuenta institucional y adjunta tu CV o portafolio.</p></li>
         <li><span class="fecha">Al cierre</span><h3>Revisión de perfiles</h3>
           <p>Se evalúan conocimientos, proyectos previos, disponibilidad y tu respuesta al reto breve.</p></li>
-        <li><span class="fecha" data-campo="fechaEntrevistas"></span><h3>Entrevista y reto técnico</h3>
-          <p>Una conversación corta y un ejercicio práctico sencillo, adaptado al área que elijas.</p></li>
+        <li><span class="fecha" data-campo="fechaEntrevistas"></span><h3>Entrevista</h3>
+          <p>Con el Jefe del Departamento de Sistemas y Computación, en la Jefatura del departamento. Te avisaremos
+            por correo el día que te corresponde.</p></li>
         <li><span class="fecha" data-campo="fechaResultados"></span><h3>Resultados</h3>
           <p>Se publican los 4 seleccionados y 2 lugares de reserva; se avisa por correo institucional.</p></li>
         <li><span class="fecha" data-campo="fechaInicio"></span><h3>Inicio del proyecto</h3>
@@ -374,7 +375,7 @@ const CONFIG = {
         <p>La propiedad intelectual se rige por los lineamientos del TecNM. Tu autoría se reconoce en el registro del
           software y en las publicaciones en que participes.</p></details>
       <details><summary>Tengo más dudas, ¿a quién pregunto?</summary>
-        <p>Acude a <span data-campo="lugar"></span><span data-si-horario> (<span data-campo="horario"></span>)</span><span data-si-correo>, escribe a
+        <p>Acude al <span data-campo="lugar"></span><span data-si-horario> (<span data-campo="horario"></span>)</span><span data-si-correo> o escribe a
           <a data-campo-correo href="#"></a></span><span data-si-telefono> o llama al <span data-campo="telefono"></span></span>.</p></details>
     </div>
   </section>
