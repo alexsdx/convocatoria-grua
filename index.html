@@ -168,10 +168,11 @@ const CONFIG = {
   // Enlace al formulario de Microsoft Forms. Si está vacío, el botón aparece desactivado.
   formulario: "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=RVY7ParqukKsUskxkQp_Lyo-B5l0nHNPrFsCfztMaXBUMzRVUkdYM082WFFJWENZNldDRE0zSEw0SC4u",
 
-  // Fechas (texto libre), acordadas con el departamento el 19 de octubre de 2026.
+  // Fechas (texto libre), acordadas con el departamento el 19 de octubre de 2026 y ampliadas el 28 de octubre
+  // (primera ronda de entrevistas: 26, 27 y 28 de octubre).
   fechaApertura:    "martes 20 de octubre",
-  fechaCierre:      "viernes 23 de octubre de 2026, 23:59 h",
-  fechaEntrevistas: "lunes 26, martes 27 y miércoles 28 de octubre, 12:00 h",
+  fechaCierre:      "lunes 2 de noviembre de 2026, 23:59 h",
+  fechaEntrevistas: "martes 3, miércoles 4 y jueves 5 de noviembre, 12:00 h",
   fechaResultados:  "al concluir las entrevistas",
   fechaInicio:      "enero de 2027",
 
@@ -201,6 +202,7 @@ const CONFIG = {
   <section class="portada">
     <div class="contenedor">
       <span class="etiqueta">Convocatoria para estudiantes</span>
+      <span class="etiqueta" style="background:var(--amarillo);color:#111">Ampliada al 2 de noviembre</span>
       <h1>Simulador de <span>grúa portuaria</span></h1>
       <p class="lema">Buscamos <strong>9 estudiantes del ITCM, en 3 equipos de 3</strong>, para construir, desde cero,
         el software de un simulador inmersivo de cabina para capacitar a operadores de grúa del puerto de Altamira, con
@@ -281,7 +283,7 @@ const CONFIG = {
         <h2><span class="acento">Requisitos</span></h2>
         <ul class="lista-check">
           <li>Ser estudiante inscrito del ITCM.</li>
-          <li>Cursar del 3.<sup>er</sup> semestre en adelante.</li>
+          <li>Cursar cualquier semestre, desde el 1.<sup>er</sup> semestre.</li>
           <li>Saber programar bien en al menos un lenguaje: C++, C#, Python o similar.</li>
           <li><strong>Disponibilidad de unas 20 horas por semana</strong> de enero a diciembre de 2027, y de 30 a 35 horas
             en el verano.</li>
@@ -331,7 +333,7 @@ const CONFIG = {
           <p>Llena el formulario con tu cuenta institucional y adjunta tu CV o portafolio.</p></li>
         <li><span class="fecha">Al cierre</span><h3>Revisión de perfiles</h3>
           <p>Se evalúan conocimientos, proyectos previos, disponibilidad y tu respuesta al reto breve.</p></li>
-        <li><span class="fecha" data-campo="fechaEntrevistas"></span><h3>Entrevista y portafolio</h3>
+        <li><span class="fecha" data-campo="fechaEntrevistas"></span><h3>Entrevista y portafolio (segunda ronda)</h3>
           <p>En el laboratorio de Sistemas; pregunta por el proyecto. Asiste con tu proyecto en Unity, Godot o Unreal si
             llenaste el formulario.</p></li>
         <li><span class="fecha" data-campo="fechaResultados"></span><h3>Resultados</h3>
@@ -372,8 +374,8 @@ const CONFIG = {
         <p>Está pensado para unas 20 horas por semana durante el semestre, con horario acordado con el equipo. En verano
           se trabaja más intensamente (30 a 35 horas).</p></details>
       <details><summary>Soy de otra carrera, ¿puedo participar?</summary>
-        <p>Sí. La convocatoria está abierta a estudiantes de cualquier carrera del ITCM, de 3.<sup>er</sup> semestre en
-          adelante, que cumplan los requisitos: programar bien y mostrar un proyecto propio en Unity, Godot o Unreal.
+        <p>Sí. La convocatoria está abierta a estudiantes de cualquier carrera y de cualquier semestre del ITCM, desde el
+          1.<sup>er</sup> semestre, que cumplan los requisitos: programar bien y mostrar un proyecto propio en Unity, Godot o Unreal.
           Te integrarás al equipo que desarrolla el software del simulador.</p></details>
       <details><summary>¿De cuánto es el apoyo económico?</summary>
         <p>El monto y la figura (beca o estímulo) dependen de la autorización del recurso. Se informará a los
@@ -382,7 +384,7 @@ const CONFIG = {
         <p>Sí. Tu participación puede contar como servicio social, residencias o crédito complementario, siempre que
           cumplas los requisitos de cada modalidad. Indícalo en el formulario.</p></details>
       <details><summary>¿Cuándo y dónde es la entrevista?</summary>
-        <p>El <span data-campo="fechaEntrevistas"></span>, en el laboratorio de Sistemas; pregunta por el proyecto. Si
+        <p>La segunda ronda es el <span data-campo="fechaEntrevistas"></span>, en el laboratorio de Sistemas; pregunta por el proyecto. Si
           llenaste el formulario, asiste el día que prefieras con tu proyecto en Unity, Godot o Unreal para mostrarlo.</p></details>
       <details><summary>¿Quién es dueño de lo que desarrolle?</summary>
         <p>La propiedad intelectual se rige por los lineamientos del TecNM. Tu autoría se reconoce en el registro del
